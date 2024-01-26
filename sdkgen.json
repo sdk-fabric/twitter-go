@@ -1,0 +1,8 @@
+{
+  "type": "client-go",
+  "require": {
+    "sdkfabric/twitter": {
+      "target": "./src"
+    }
+  }
+}
