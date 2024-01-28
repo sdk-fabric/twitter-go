@@ -2,7 +2,7 @@
   "type": "client-go",
   "require": {
     "sdkfabric/twitter": {
-      "target": "./src"
+      "target": "./sdk"
     }
   }
 }
