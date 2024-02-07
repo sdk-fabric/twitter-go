@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type TweetDeleteResponse struct {
     Data TweetDeleteResponseMessage `json:"data"`
 }

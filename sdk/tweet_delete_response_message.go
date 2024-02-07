@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type TweetDeleteResponseMessage struct {
     Deleted bool `json:"deleted"`
 }

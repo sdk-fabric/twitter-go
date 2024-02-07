@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type TweetMedia struct {
     MediaIds []string `json:"media_ids"`
     TaggedUserIds []string `json:"tagged_user_ids"`

@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type TweetGeo struct {
     PlaceId string `json:"place_id"`
 }

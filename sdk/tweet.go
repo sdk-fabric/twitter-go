@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type Tweet struct {
     DirectMessageDeepLink string `json:"direct_message_deep_link"`
     ForSuperFollowersOnly bool `json:"for_super_followers_only"`

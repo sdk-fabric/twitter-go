@@ -3,13 +3,15 @@
 // @see https://sdkgen.app
 
 
+package sdk
+
 import "time"
 type TweetDetails struct {
-    AuthorId string `json:"author_id"`
-    ConversationId string `json:"conversation_id"`
-    CreatedAt time.Time `json:"created_at"`
-    EditHistoryTweetIds []string `json:"edit_history_tweet_ids"`
     Id string `json:"id"`
-    InReplyToUserId string `json:"in_reply_to_user_id"`
     Text string `json:"text"`
+    CreatedAt time.Time `json:"created_at"`
+    AuthorId string `json:"author_id"`
+    EditHistoryTweetIds []string `json:"edit_history_tweet_ids"`
+    ConversationId string `json:"conversation_id"`
+    InReplyToUserId string `json:"in_reply_to_user_id"`
 }

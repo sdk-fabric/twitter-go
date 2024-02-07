@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 type TweetCreateResponseMessage struct {
     Id string `json:"id"`
     Text string `json:"text"`

@@ -3,6 +3,7 @@
 // @see https://sdkgen.app
 
 
+package sdk
 
 import (
     
@@ -21,6 +22,18 @@ type Client struct {
 
 func (client *Client) Tweet() *TweetTag {
     return NewTweetTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) Usage() *UsageTag {
+    return NewUsageTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) User() *UserTag {
+    return NewUserTag(client.internal.HttpClient, client.internal.Parser)
+}
+
+func (client *Client) Bookmark() *BookmarkTag {
+    return NewBookmarkTag(client.internal.HttpClient, client.internal.Parser)
 }
 
 
