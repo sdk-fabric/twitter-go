@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/apioo/twitter-go/sdk"
+	"github.com/sdk-fabric/twitter-go/sdk"
 	"github.com/apioo/sdkgen-go"
 	"reflect"
 	"testing"
