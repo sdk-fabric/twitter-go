@@ -53,13 +53,6 @@ func NewClient(baseUrl string, credentials sdkgen.CredentialsInterface) (*Client
 func Build(token string) (*Client, error) {
     var credentials = sdkgen.HttpBearer{Token: token}
 
-    client, err := NewClient("https://api.twitter.com", credentials)
-    if err != nil {
-        return &Client{}, err
-    }
-
-    return &Client {
-        internal: client,
-    }, nil
+    return NewClient("https://api.twitter.com", credentials)
 }
 
