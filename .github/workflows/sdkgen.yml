@@ -3,12 +3,25 @@ on:
   - workflow_dispatch
 permissions:
   contents: 'write'
+inputs:
+  typehub_message:
+    description: 'The TypeHub commit message, only available for commits'
+    required: false
+  typehub_version:
+    description: 'The TypeHub tag version, only available for tags'
+    required: false
+  typehub_changelog:
+    description: 'The TypeHub tag changelog, only available for tags'
+    required: false
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: apioo/sdkgen-generator-action@v0.1.4
+      - uses: apioo/sdkgen-generator-action@v0.2.0
         with:
           client_id: '${{ secrets.SDKGEN_CLIENT_ID }}'
           client_secret: '${{ secrets.SDKGEN_CLIENT_SECRET }}'
+          typehub_message: '${{ inputs.typehub_message }}'
+          typehub_version: '${{ inputs.typehub_version }}'
+          typehub_changelog: '${{ inputs.typehub_changelog }}'
