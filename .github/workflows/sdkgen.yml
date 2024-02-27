@@ -1,18 +1,15 @@
 name: SDKgen
 on:
-  - workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      typehub_message:
+        required: false
+      typehub_version:
+        required: false
+      typehub_changelog:
+        required: false
 permissions:
   contents: 'write'
-inputs:
-  typehub_message:
-    description: 'The TypeHub commit message, only available for commits'
-    required: false
-  typehub_version:
-    description: 'The TypeHub tag version, only available for tags'
-    required: false
-  typehub_changelog:
-    description: 'The TypeHub tag changelog, only available for tags'
-    required: false
 jobs:
   generate:
     runs-on: ubuntu-latest
