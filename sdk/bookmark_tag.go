@@ -6,7 +6,7 @@
 package sdk
 
 import (
-    
+    "bytes"
     "encoding/json"
     "errors"
     "github.com/apioo/sdkgen-go"
@@ -76,6 +76,62 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults s
     switch resp.StatusCode {
         default:
             return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// Create 
+func (client *BookmarkTag) Create(userId string, payload Tweet) (Tweet, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
+
+    queryParams := make(map[string]interface{})
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
+    if err != nil {
+        return Tweet{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return Tweet{}, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("POST", u.String(), reqBody)
+    if err != nil {
+        return Tweet{}, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return Tweet{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return Tweet{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response Tweet
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return Tweet{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return Tweet{}, errors.New("the server returned an unknown status code")
     }
 }
 
