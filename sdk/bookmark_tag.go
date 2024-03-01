@@ -80,7 +80,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults s
 }
 
 // Create 
-func (client *BookmarkTag) Create(userId string, payload Tweet) (Tweet, error) {
+func (client *BookmarkTag) Create(userId string, payload BookmarkCreate) (BookmarkCreateResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -88,42 +88,42 @@ func (client *BookmarkTag) Create(userId string, payload Tweet) (Tweet, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
-        return Tweet{}, err
+        return BookmarkCreateResponse{}, err
     }
 
     u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return Tweet{}, err
+        return BookmarkCreateResponse{}, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("POST", u.String(), reqBody)
     if err != nil {
-        return Tweet{}, err
+        return BookmarkCreateResponse{}, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return Tweet{}, err
+        return BookmarkCreateResponse{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return Tweet{}, err
+        return BookmarkCreateResponse{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response Tweet
+        var response BookmarkCreateResponse
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return Tweet{}, err
+            return BookmarkCreateResponse{}, err
         }
 
         return response, nil
@@ -131,7 +131,7 @@ func (client *BookmarkTag) Create(userId string, payload Tweet) (Tweet, error) {
 
     switch resp.StatusCode {
         default:
-            return Tweet{}, errors.New("the server returned an unknown status code")
+            return BookmarkCreateResponse{}, errors.New("the server returned an unknown status code")
     }
 }
 
