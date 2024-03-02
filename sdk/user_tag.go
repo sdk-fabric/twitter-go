@@ -85,7 +85,7 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
 }
 
 // GetLikedTweets Tweets liked by a user
-func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults string, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 

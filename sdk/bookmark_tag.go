@@ -23,7 +23,7 @@ type BookmarkTag struct {
 
 
 // GetAll Allows you to get an authenticated user&#039;s 800 most recent bookmarked Tweets.
-func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults string, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults int, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
