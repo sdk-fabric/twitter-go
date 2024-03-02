@@ -40,6 +40,10 @@ func (client *Client) Search() *SearchTag {
     return NewSearchTag(client.internal.HttpClient, client.internal.Parser)
 }
 
+func (client *Client) Quote() *QuoteTag {
+    return NewQuoteTag(client.internal.HttpClient, client.internal.Parser)
+}
+
 
 
 
