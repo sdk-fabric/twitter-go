@@ -23,15 +23,24 @@ type UserTag struct {
 
 
 // GetTimeline 
-func (client *UserTag) GetTimeline(userId string, expansions string, tweetFields string, userFields string, maxResults int) (TweetCollectionResponse, error) {
+func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
     queryParams := make(map[string]interface{})
+    queryParams["start_time"] = startTime
+    queryParams["end_time"] = endTime
+    queryParams["since_id"] = sinceId
+    queryParams["until_id"] = untilId
+    queryParams["exclude"] = exclude
     queryParams["expansions"] = expansions
+    queryParams["max_results"] = maxResults
+    queryParams["pagination_token"] = paginationToken
+    queryParams["media.fields"] = mediaFields
+    queryParams["place.fields"] = placeFields
+    queryParams["poll.fields"] = pollFields
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
-    queryParams["max_results"] = maxResults
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
