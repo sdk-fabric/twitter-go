@@ -36,6 +36,10 @@ func (client *Client) Bookmark() *BookmarkTag {
     return NewBookmarkTag(client.internal.HttpClient, client.internal.Parser)
 }
 
+func (client *Client) Likes() *LikesTag {
+    return NewLikesTag(client.internal.HttpClient, client.internal.Parser)
+}
+
 
 
 
