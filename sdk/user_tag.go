@@ -75,6 +75,63 @@ func (client *UserTag) GetTimeline(userId string, expansions string, tweetFields
     }
 }
 
+// GetLikedTweets Tweets liked by a user
+func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults string, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
+
+    queryParams := make(map[string]interface{})
+    queryParams["expansions"] = expansions
+    queryParams["max_results"] = maxResults
+    queryParams["pagination_token"] = paginationToken
+    queryParams["media.fields"] = mediaFields
+    queryParams["place.fields"] = placeFields
+    queryParams["poll.fields"] = pollFields
+    queryParams["tweet.fields"] = tweetFields
+    queryParams["user.fields"] = userFields
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
+    if err != nil {
+        return TweetCollectionResponse{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return TweetCollectionResponse{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return TweetCollectionResponse{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return TweetCollectionResponse{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response TweetCollectionResponse
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return TweetCollectionResponse{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
 
 
 func NewUserTag(httpClient *http.Client, parser *sdkgen.Parser) *UserTag {
