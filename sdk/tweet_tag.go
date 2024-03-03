@@ -236,6 +236,62 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
     }
 }
 
+// HideReply Hides or unhides a reply to a Tweet.
+func (client *TweetTag) HideReply(tweetId string, payload HideReplyUpdate) (HideReplyResponse, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["tweet_id"] = tweetId
+
+    queryParams := make(map[string]interface{})
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/hidden", pathParams))
+    if err != nil {
+        return HideReplyResponse{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return HideReplyResponse{}, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("PUT", u.String(), reqBody)
+    if err != nil {
+        return HideReplyResponse{}, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return HideReplyResponse{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return HideReplyResponse{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response HideReplyResponse
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return HideReplyResponse{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return HideReplyResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
 
 
 func NewTweetTag(httpClient *http.Client, parser *sdkgen.Parser) *TweetTag {
