@@ -80,7 +80,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
 }
 
 // Create 
-func (client *BookmarkTag) Create(userId string, payload BookmarkCreate) (BookmarkResponse, error) {
+func (client *BookmarkTag) Create(userId string, payload SingleTweet) (BookmarkResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 

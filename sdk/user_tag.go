@@ -6,7 +6,7 @@
 package sdk
 
 import (
-    
+    "bytes"
     "encoding/json"
     "errors"
     "github.com/apioo/sdkgen-go"
@@ -138,6 +138,112 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     switch resp.StatusCode {
         default:
             return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// RemoveLike 
+func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
+    pathParams["tweet_id"] = tweetId
+
+    queryParams := make(map[string]interface{})
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes/:tweet_id", pathParams))
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+
+
+    req, err := http.NewRequest("DELETE", u.String(), nil)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response LikeResponse
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return LikeResponse{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return LikeResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// CreateLike 
+func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeResponse, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
+
+    queryParams := make(map[string]interface{})
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes", pathParams))
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+
+    raw, err := json.Marshal(payload)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    var reqBody = bytes.NewReader(raw)
+
+    req, err := http.NewRequest("POST", u.String(), reqBody)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return LikeResponse{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response LikeResponse
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return LikeResponse{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return LikeResponse{}, errors.New("the server returned an unknown status code")
     }
 }
 
