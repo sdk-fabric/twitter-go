@@ -5,5 +5,5 @@
 
 package sdk
 type TweetEntityResponse struct {
-    Data TweetDetails `json:"data"`
+    Data *TweetDetails `json:"data"`
 }

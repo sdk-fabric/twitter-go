@@ -5,5 +5,5 @@
 
 package sdk
 type TweetDeleteResponse struct {
-    Data TweetDeleteResponseMessage `json:"data"`
+    Data *TweetDeleteResponseMessage `json:"data"`
 }

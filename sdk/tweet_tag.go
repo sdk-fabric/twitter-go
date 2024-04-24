@@ -35,12 +35,14 @@ func (client *TweetTag) GetAll(ids string, expansions string, mediaFields string
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)
@@ -90,12 +92,14 @@ func (client *TweetTag) Get(tweetId string, expansions string, mediaFields strin
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {
         return TweetEntityResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)
@@ -138,12 +142,14 @@ func (client *TweetTag) Create(payload Tweet) (TweetCreateResponse, error) {
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
         return TweetCreateResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
@@ -194,12 +200,14 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {
         return TweetDeleteResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("DELETE", u.String(), nil)
@@ -243,12 +251,14 @@ func (client *TweetTag) HideReply(tweetId string, payload HideReplyUpdate) (Hide
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/hidden", pathParams))
     if err != nil {
         return HideReplyResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {

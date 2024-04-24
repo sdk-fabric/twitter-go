@@ -42,12 +42,14 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)
@@ -99,12 +101,14 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)
@@ -149,12 +153,14 @@ func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, 
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes/:tweet_id", pathParams))
     if err != nil {
         return LikeResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("DELETE", u.String(), nil)
@@ -198,12 +204,14 @@ func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeRespo
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes", pathParams))
     if err != nil {
         return LikeResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {

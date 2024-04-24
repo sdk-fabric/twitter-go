@@ -5,5 +5,5 @@
 
 package sdk
 type LikeResponse struct {
-    Data LikeResponseMessage `json:"data"`
+    Data *LikeResponseMessage `json:"data"`
 }

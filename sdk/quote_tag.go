@@ -38,12 +38,14 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/quote_tweets", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)

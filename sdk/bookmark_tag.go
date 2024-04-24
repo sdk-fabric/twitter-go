@@ -37,12 +37,14 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)
@@ -86,12 +88,14 @@ func (client *BookmarkTag) Create(userId string, payload SingleTweet) (BookmarkR
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
         return BookmarkResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
@@ -143,12 +147,14 @@ func (client *BookmarkTag) Delete(userId string, tweetId string) (BookmarkRespon
 
     queryParams := make(map[string]interface{})
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks/:tweet_id", pathParams))
     if err != nil {
         return BookmarkResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("DELETE", u.String(), nil)

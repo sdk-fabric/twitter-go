@@ -41,12 +41,14 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
     queryParams["tweet.fields"] = tweetFields
     queryParams["user.fields"] = userFields
 
+    var queryStructNames []string
+
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/search/recent", pathParams))
     if err != nil {
         return TweetCollectionResponse{}, err
     }
 
-    u.RawQuery = client.internal.Parser.Query(queryParams).Encode()
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
 
     req, err := http.NewRequest("GET", u.String(), nil)

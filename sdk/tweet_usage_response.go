@@ -5,5 +5,5 @@
 
 package sdk
 type TweetUsageResponse struct {
-    Data TweetUsage `json:"data"`
+    Data *TweetUsage `json:"data"`
 }

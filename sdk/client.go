@@ -44,6 +44,10 @@ func (client *Client) Quote() *QuoteTag {
     return NewQuoteTag(client.internal.HttpClient, client.internal.Parser)
 }
 
+func (client *Client) Trends() *TrendsTag {
+    return NewTrendsTag(client.internal.HttpClient, client.internal.Parser)
+}
+
 
 
 
