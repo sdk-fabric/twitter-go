@@ -23,7 +23,7 @@ type SearchTag struct {
 
 
 // GetRecent 
-func (client *SearchTag) GetRecent(query string, startTime string, endTime string, sinceId string, untilId string, sortOrder string, expansions string, maxResults int, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *SearchTag) GetRecent(query string, startTime string, endTime string, sinceId string, untilId string, sortOrder string, expansions string, maxResults int, fields Fields) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -35,13 +35,10 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
     queryParams["sort_order"] = sortOrder
     queryParams["expansions"] = expansions
     queryParams["max_results"] = maxResults
-    queryParams["media.fields"] = mediaFields
-    queryParams["place.fields"] = placeFields
-    queryParams["poll.fields"] = pollFields
-    queryParams["tweet.fields"] = tweetFields
-    queryParams["user.fields"] = userFields
+    queryParams["fields"] = fields
 
     var queryStructNames []string
+    append(queryStructNames, '0'),
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/search/recent", pathParams))
     if err != nil {

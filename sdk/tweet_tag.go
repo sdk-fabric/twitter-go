@@ -23,19 +23,16 @@ type TweetTag struct {
 
 
 // GetAll Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
-func (client *TweetTag) GetAll(ids string, expansions string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
     queryParams["ids"] = ids
     queryParams["expansions"] = expansions
-    queryParams["media.fields"] = mediaFields
-    queryParams["place.fields"] = placeFields
-    queryParams["poll.fields"] = pollFields
-    queryParams["tweet.fields"] = tweetFields
-    queryParams["user.fields"] = userFields
+    queryParams["fields"] = fields
 
     var queryStructNames []string
+    append(queryStructNames, '0'),
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
@@ -80,19 +77,16 @@ func (client *TweetTag) GetAll(ids string, expansions string, mediaFields string
 }
 
 // Get Returns a variety of information about a single Tweet specified by the requested ID.
-func (client *TweetTag) Get(tweetId string, expansions string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetEntityResponse, error) {
+func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (TweetEntityResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
     queryParams := make(map[string]interface{})
     queryParams["expansions"] = expansions
-    queryParams["media.fields"] = mediaFields
-    queryParams["place.fields"] = placeFields
-    queryParams["poll.fields"] = pollFields
-    queryParams["tweet.fields"] = tweetFields
-    queryParams["user.fields"] = userFields
+    queryParams["fields"] = fields
 
     var queryStructNames []string
+    append(queryStructNames, '0'),
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {

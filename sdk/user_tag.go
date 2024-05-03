@@ -23,7 +23,7 @@ type UserTag struct {
 
 
 // GetTimeline 
-func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -36,13 +36,10 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
     queryParams["expansions"] = expansions
     queryParams["max_results"] = maxResults
     queryParams["pagination_token"] = paginationToken
-    queryParams["media.fields"] = mediaFields
-    queryParams["place.fields"] = placeFields
-    queryParams["poll.fields"] = pollFields
-    queryParams["tweet.fields"] = tweetFields
-    queryParams["user.fields"] = userFields
+    queryParams["fields"] = fields
 
     var queryStructNames []string
+    append(queryStructNames, '0'),
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
@@ -87,7 +84,7 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
 }
 
 // GetLikedTweets Tweets liked by a user
-func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, mediaFields string, placeFields string, pollFields string, tweetFields string, userFields string) (TweetCollectionResponse, error) {
+func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -95,13 +92,10 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     queryParams["expansions"] = expansions
     queryParams["max_results"] = maxResults
     queryParams["pagination_token"] = paginationToken
-    queryParams["media.fields"] = mediaFields
-    queryParams["place.fields"] = placeFields
-    queryParams["poll.fields"] = pollFields
-    queryParams["tweet.fields"] = tweetFields
-    queryParams["user.fields"] = userFields
+    queryParams["fields"] = fields
 
     var queryStructNames []string
+    append(queryStructNames, '0'),
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
     if err != nil {
