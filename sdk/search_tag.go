@@ -23,7 +23,7 @@ type SearchTag struct {
 
 
 // GetRecent 
-func (client *SearchTag) GetRecent(query string, startTime string, endTime string, sinceId string, untilId string, sortOrder string, expansions string, maxResults int, fields Fields) (TweetCollectionResponse, error) {
+func (client *SearchTag) GetRecent(query string, startTime string, endTime string, sinceId string, untilId string, sortOrder string, expansions string, maxResults int, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -42,7 +42,7 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/search/recent", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -50,27 +50,27 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -78,7 +78,7 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 

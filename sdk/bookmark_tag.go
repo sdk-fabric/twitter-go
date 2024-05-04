@@ -23,7 +23,7 @@ type BookmarkTag struct {
 
 
 // GetAll Allows you to get an authenticated user&#039;s 800 most recent bookmarked Tweets.
-func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
+func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -38,7 +38,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -46,27 +46,27 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -74,7 +74,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 

@@ -5,5 +5,5 @@
 
 package sdk
 type BookmarkResponse struct {
-    Data *BookmarkResponseMessage `json:"data"`
+    Data *Bookmark `json:"data"`
 }

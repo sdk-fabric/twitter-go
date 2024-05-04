@@ -5,5 +5,5 @@
 
 package sdk
 type HideReplyResponse struct {
-    Data *HideReplyUpdate `json:"data"`
+    Data *HideReply `json:"data"`
 }

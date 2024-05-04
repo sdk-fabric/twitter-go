@@ -23,7 +23,7 @@ type TweetTag struct {
 
 
 // GetAll Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
-func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (TweetCollectionResponse, error) {
+func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -36,7 +36,7 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -44,27 +44,27 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -72,12 +72,12 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 
 // Get Returns a variety of information about a single Tweet specified by the requested ID.
-func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (TweetEntityResponse, error) {
+func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (TweetEntity, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -90,7 +90,7 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {
-        return TweetEntityResponse{}, err
+        return TweetEntity{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -98,27 +98,27 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetEntityResponse{}, err
+        return TweetEntity{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetEntityResponse{}, err
+        return TweetEntity{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetEntityResponse{}, err
+        return TweetEntity{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetEntityResponse
+        var response TweetEntity
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetEntityResponse{}, err
+            return TweetEntity{}, err
         }
 
         return response, nil
@@ -126,7 +126,7 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
 
     switch resp.StatusCode {
         default:
-            return TweetEntityResponse{}, errors.New("the server returned an unknown status code")
+            return TweetEntity{}, errors.New("the server returned an unknown status code")
     }
 }
 
@@ -239,7 +239,7 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
 }
 
 // HideReply Hides or unhides a reply to a Tweet.
-func (client *TweetTag) HideReply(tweetId string, payload HideReplyUpdate) (HideReplyResponse, error) {
+func (client *TweetTag) HideReply(tweetId string, payload HideReply) (HideReplyResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 

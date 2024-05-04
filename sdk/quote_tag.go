@@ -23,7 +23,7 @@ type QuoteTag struct {
 
 
 // GetAll Returns Quote Tweets for a Tweet specified by the requested Tweet ID.
-func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
+func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -39,7 +39,7 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/quote_tweets", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -47,27 +47,27 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -75,7 +75,7 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 

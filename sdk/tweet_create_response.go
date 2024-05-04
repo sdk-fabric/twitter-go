@@ -5,5 +5,5 @@
 
 package sdk
 type TweetCreateResponse struct {
-    Data *TweetCreateResponseMessage `json:"data"`
+    Data *TweetCreate `json:"data"`
 }

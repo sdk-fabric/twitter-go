@@ -23,7 +23,7 @@ type UserTag struct {
 
 
 // GetTimeline 
-func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
+func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -43,7 +43,7 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -51,27 +51,27 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -79,12 +79,12 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 
 // GetLikedTweets Tweets liked by a user
-func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollectionResponse, error) {
+func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -99,7 +99,7 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -107,27 +107,27 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollectionResponse{}, err
+        return TweetCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollectionResponse
+        var response TweetCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TweetCollectionResponse{}, err
+            return TweetCollection{}, err
         }
 
         return response, nil
@@ -135,7 +135,7 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
 
     switch resp.StatusCode {
         default:
-            return TweetCollectionResponse{}, errors.New("the server returned an unknown status code")
+            return TweetCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 
@@ -246,6 +246,60 @@ func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeRespo
     switch resp.StatusCode {
         default:
             return LikeResponse{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// FindByName 
+func (client *UserTag) FindByName(usernames string, expansions string, fields Fields) (UserCollection, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+    queryParams["usernames"] = usernames
+    queryParams["expansions"] = expansions
+    queryParams["fields"] = fields
+
+    var queryStructNames []string
+    append(queryStructNames, '0'),
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/by", pathParams))
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response UserCollection
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return UserCollection{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return UserCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 

@@ -22,8 +22,8 @@ type TrendsTag struct {
 
 
 
-// ByWoeid The Trends lookup endpoint allow developers to get the Trends for a location, specified using the where-on-earth id (WOEID).
-func (client *TrendsTag) ByWoeid(woeid string) (TrendsResponse, error) {
+// GetByWoeid The Trends lookup endpoint allow developers to get the Trends for a location, specified using the where-on-earth id (WOEID).
+func (client *TrendsTag) GetByWoeid(woeid string) (TrendCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["woeid"] = woeid
 
@@ -33,7 +33,7 @@ func (client *TrendsTag) ByWoeid(woeid string) (TrendsResponse, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/trends/by/woeid/:woeid", pathParams))
     if err != nil {
-        return TrendsResponse{}, err
+        return TrendCollection{}, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -41,27 +41,27 @@ func (client *TrendsTag) ByWoeid(woeid string) (TrendsResponse, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TrendsResponse{}, err
+        return TrendCollection{}, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TrendsResponse{}, err
+        return TrendCollection{}, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TrendsResponse{}, err
+        return TrendCollection{}, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TrendsResponse
+        var response TrendCollection
         err = json.Unmarshal(respBody, &response)
         if err != nil {
-            return TrendsResponse{}, err
+            return TrendCollection{}, err
         }
 
         return response, nil
@@ -69,7 +69,7 @@ func (client *TrendsTag) ByWoeid(woeid string) (TrendsResponse, error) {
 
     switch resp.StatusCode {
         default:
-            return TrendsResponse{}, errors.New("the server returned an unknown status code")
+            return TrendCollection{}, errors.New("the server returned an unknown status code")
     }
 }
 
