@@ -34,7 +34,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, maxResults i
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {

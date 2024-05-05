@@ -35,7 +35,7 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/quote_tweets", pathParams))
     if err != nil {

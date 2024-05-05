@@ -22,7 +22,7 @@ type UserTag struct {
 
 
 
-// GetTimeline 
+// GetTimeline Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
 func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
@@ -39,7 +39,7 @@ func (client *UserTag) GetTimeline(userId string, startTime string, endTime stri
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
@@ -95,7 +95,7 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
     if err != nil {
@@ -259,7 +259,7 @@ func (client *UserTag) FindByName(usernames string, expansions string, fields Fi
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/by", pathParams))
     if err != nil {

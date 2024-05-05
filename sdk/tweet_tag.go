@@ -32,7 +32,7 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
@@ -86,7 +86,7 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {

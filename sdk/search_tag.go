@@ -38,7 +38,7 @@ func (client *SearchTag) GetRecent(query string, startTime string, endTime strin
     queryParams["fields"] = fields
 
     var queryStructNames []string
-    append(queryStructNames, '0'),
+    append(queryStructNames, '0')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/search/recent", pathParams))
     if err != nil {
