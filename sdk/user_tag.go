@@ -139,7 +139,7 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     }
 }
 
-// RemoveLike 
+// RemoveLike Allows a user or authenticated user ID to unlike a Tweet.
 func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
@@ -191,7 +191,7 @@ func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, 
     }
 }
 
-// CreateLike 
+// CreateLike Causes the user ID identified in the path parameter to Like the target Tweet.
 func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
@@ -249,7 +249,7 @@ func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeRespo
     }
 }
 
-// FindByName 
+// FindByName Returns a variety of information about one or more users specified by their usernames.
 func (client *UserTag) FindByName(usernames string, expansions string, fields Fields) (UserCollection, error) {
     pathParams := make(map[string]interface{})
 
