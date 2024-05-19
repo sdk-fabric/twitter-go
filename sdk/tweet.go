@@ -14,4 +14,6 @@ type Tweet struct {
     Reply *TweetReply `json:"reply"`
     ReplySettings string `json:"reply_settings"`
     Text string `json:"text"`
+    PossiblySensitive bool `json:"possibly_sensitive"`
+    Lang string `json:"lang"`
 }
