@@ -22,6 +22,114 @@ type UserTag struct {
 
 
 
+// GetAll Returns a variety of information about one or more users specified by the requested IDs.
+func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (UserCollection, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+    queryParams["ids"] = ids
+    queryParams["expansions"] = expansions
+    queryParams["fields"] = fields
+
+    var queryStructNames []string
+    append(queryStructNames, '0')
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users", pathParams))
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response UserCollection
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return UserCollection{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return UserCollection{}, errors.New("the server returned an unknown status code")
+    }
+}
+
+// Get Returns a variety of information about a single user specified by the requested ID.
+func (client *UserTag) Get(userId string, expansions string, fields Fields) (User, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["user_id"] = userId
+
+    queryParams := make(map[string]interface{})
+    queryParams["expansions"] = expansions
+    queryParams["fields"] = fields
+
+    var queryStructNames []string
+    append(queryStructNames, '0')
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id", pathParams))
+    if err != nil {
+        return User{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return User{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return User{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return User{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response User
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return User{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return User{}, errors.New("the server returned an unknown status code")
+    }
+}
+
 // GetTimeline Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
 func (client *UserTag) GetTimeline(userId string, exclude string, expansions string, pagination Pagination, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
