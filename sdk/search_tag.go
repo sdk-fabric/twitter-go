@@ -23,22 +23,19 @@ type SearchTag struct {
 
 
 // GetRecent 
-func (client *SearchTag) GetRecent(query string, startTime string, endTime string, sinceId string, untilId string, sortOrder string, expansions string, maxResults int, fields Fields) (TweetCollection, error) {
+func (client *SearchTag) GetRecent(query string, sortOrder string, expansions string, pagination Pagination, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
     queryParams["query"] = query
-    queryParams["start_time"] = startTime
-    queryParams["end_time"] = endTime
-    queryParams["since_id"] = sinceId
-    queryParams["until_id"] = untilId
     queryParams["sort_order"] = sortOrder
     queryParams["expansions"] = expansions
-    queryParams["max_results"] = maxResults
+    queryParams["pagination"] = pagination
     queryParams["fields"] = fields
 
     var queryStructNames []string
     append(queryStructNames, '0')
+    append(queryStructNames, '1')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/search/recent", pathParams))
     if err != nil {

@@ -296,6 +296,60 @@ func (client *TweetTag) HideReply(tweetId string, payload HideReply) (HideReplyR
     }
 }
 
+// GetLikingUsers Allows you to get information about a Tweet’s liking users.
+func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxResults int, paginationToken string) (UserCollection, error) {
+    pathParams := make(map[string]interface{})
+    pathParams["tweet_id"] = tweetId
+
+    queryParams := make(map[string]interface{})
+    queryParams["expansions"] = expansions
+    queryParams["max_results"] = maxResults
+    queryParams["pagination_token"] = paginationToken
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/liking_users", pathParams))
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return UserCollection{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response UserCollection
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return UserCollection{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return UserCollection{}, errors.New("the server returned an unknown status code")
+    }
+}
+
 
 
 func NewTweetTag(httpClient *http.Client, parser *sdkgen.Parser) *TweetTag {

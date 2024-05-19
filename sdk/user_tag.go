@@ -23,23 +23,19 @@ type UserTag struct {
 
 
 // GetTimeline Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
-func (client *UserTag) GetTimeline(userId string, startTime string, endTime string, sinceId string, untilId string, exclude string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
+func (client *UserTag) GetTimeline(userId string, exclude string, expansions string, pagination Pagination, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
     queryParams := make(map[string]interface{})
-    queryParams["start_time"] = startTime
-    queryParams["end_time"] = endTime
-    queryParams["since_id"] = sinceId
-    queryParams["until_id"] = untilId
     queryParams["exclude"] = exclude
     queryParams["expansions"] = expansions
-    queryParams["max_results"] = maxResults
-    queryParams["pagination_token"] = paginationToken
+    queryParams["pagination"] = pagination
     queryParams["fields"] = fields
 
     var queryStructNames []string
     append(queryStructNames, '0')
+    append(queryStructNames, '1')
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
