@@ -407,6 +407,58 @@ func (client *UserTag) FindByName(usernames string, expansions string, fields Fi
     }
 }
 
+// GetMe Returns information about an authorized user.
+func (client *UserTag) GetMe(expansions string, fields string) (User, error) {
+    pathParams := make(map[string]interface{})
+
+    queryParams := make(map[string]interface{})
+    queryParams["expansions"] = expansions
+    queryParams["fields"] = fields
+
+    var queryStructNames []string
+
+    u, err := url.Parse(client.internal.Parser.Url("/2/users/me", pathParams))
+    if err != nil {
+        return User{}, err
+    }
+
+    u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
+
+
+    req, err := http.NewRequest("GET", u.String(), nil)
+    if err != nil {
+        return User{}, err
+    }
+
+
+    resp, err := client.internal.HttpClient.Do(req)
+    if err != nil {
+        return User{}, err
+    }
+
+    defer resp.Body.Close()
+
+    respBody, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return User{}, err
+    }
+
+    if resp.StatusCode >= 200 && resp.StatusCode < 300 {
+        var response User
+        err = json.Unmarshal(respBody, &response)
+        if err != nil {
+            return User{}, err
+        }
+
+        return response, nil
+    }
+
+    switch resp.StatusCode {
+        default:
+            return User{}, errors.New("the server returned an unknown status code")
+    }
+}
+
 
 
 func NewUserTag(httpClient *http.Client, parser *sdkgen.Parser) *UserTag {

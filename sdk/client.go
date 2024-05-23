@@ -48,6 +48,10 @@ func (client *Client) Trends() *TrendsTag {
     return NewTrendsTag(client.internal.HttpClient, client.internal.Parser)
 }
 
+func (client *Client) Retweet() *RetweetTag {
+    return NewRetweetTag(client.internal.HttpClient, client.internal.Parser)
+}
+
 
 
 
