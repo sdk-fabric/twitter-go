@@ -9,7 +9,8 @@ import (
     
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -58,20 +59,16 @@ func (client *TrendsTag) GetByWoeid(woeid string) (TrendCollection, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TrendCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TrendCollection{}, err
-        }
+        var data TrendCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TrendCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TrendCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

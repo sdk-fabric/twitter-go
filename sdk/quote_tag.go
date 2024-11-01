@@ -9,7 +9,8 @@ import (
     
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -64,20 +65,16 @@ func (client *QuoteTag) GetAll(tweetId string, exclude string, expansions string
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

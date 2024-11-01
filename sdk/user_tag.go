@@ -9,7 +9,8 @@ import (
     "bytes"
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -61,19 +62,14 @@ func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (Use
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response UserCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return UserCollection{}, err
-        }
+        var data UserCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return UserCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Get Returns a variety of information about a single user specified by the requested ID.
@@ -115,19 +111,14 @@ func (client *UserTag) Get(userId string, expansions string, fields Fields) (Use
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response User
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return User{}, err
-        }
+        var data User
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return User{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return User{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetTimeline Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
@@ -172,19 +163,14 @@ func (client *UserTag) GetTimeline(userId string, exclude string, expansions str
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetLikedTweets Tweets liked by a user
@@ -228,19 +214,14 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // RemoveLike Allows a user or authenticated user ID to unlike a Tweet.
@@ -280,19 +261,14 @@ func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, 
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response LikeResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return LikeResponse{}, err
-        }
+        var data LikeResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return LikeResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return LikeResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // CreateLike Causes the user ID identified in the path parameter to Like the target Tweet.
@@ -338,19 +314,14 @@ func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeRespo
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response LikeResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return LikeResponse{}, err
-        }
+        var data LikeResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return LikeResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return LikeResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // FindByName Returns a variety of information about one or more users specified by their usernames.
@@ -392,19 +363,14 @@ func (client *UserTag) FindByName(usernames string, expansions string, fields Fi
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response UserCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return UserCollection{}, err
-        }
+        var data UserCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return UserCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetMe Returns information about an authorized user.
@@ -444,20 +410,16 @@ func (client *UserTag) GetMe(expansions string, fields string) (User, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response User
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return User{}, err
-        }
+        var data User
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return User{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return User{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

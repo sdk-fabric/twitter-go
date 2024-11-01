@@ -9,7 +9,8 @@ import (
     "bytes"
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -61,19 +62,14 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Get Returns a variety of information about a single Tweet specified by the requested ID.
@@ -115,19 +111,14 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetEntity
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetEntity{}, err
-        }
+        var data TweetEntity
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetEntity{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetEntity{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Create Creates a Tweet on behalf of an authenticated user.
@@ -172,19 +163,14 @@ func (client *TweetTag) Create(payload Tweet) (TweetCreateResponse, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCreateResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCreateResponse{}, err
-        }
+        var data TweetCreateResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCreateResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCreateResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Delete Allows a user or authenticated user ID to delete a Tweet.
@@ -223,19 +209,14 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetDeleteResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetDeleteResponse{}, err
-        }
+        var data TweetDeleteResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetDeleteResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetDeleteResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // HideReply Hides or unhides a reply to a Tweet.
@@ -281,19 +262,14 @@ func (client *TweetTag) HideReply(tweetId string, payload HideReply) (HideReplyR
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response HideReplyResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return HideReplyResponse{}, err
-        }
+        var data HideReplyResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return HideReplyResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return HideReplyResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetLikingUsers Allows you to get information about a Tweet’s liking users.
@@ -335,20 +311,16 @@ func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxRes
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response UserCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return UserCollection{}, err
-        }
+        var data UserCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return UserCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

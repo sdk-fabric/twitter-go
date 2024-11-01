@@ -9,7 +9,8 @@ import (
     
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -22,7 +23,7 @@ type RetweetTag struct {
 
 
 
-// GetAll 
+// GetAll Returns the Retweets for a given Tweet ID.
 func (client *RetweetTag) GetAll(tweetId string, expansions string, maxResults int, fields Fields) (TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
@@ -62,20 +63,16 @@ func (client *RetweetTag) GetAll(tweetId string, expansions string, maxResults i
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 
