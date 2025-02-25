@@ -9,7 +9,8 @@ import (
     "bytes"
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -62,19 +63,14 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, paginationTo
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetCollection
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetCollection{}, err
-        }
+        var data TweetCollection
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetCollection{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Create 
@@ -120,19 +116,14 @@ func (client *BookmarkTag) Create(userId string, payload SingleTweet) (BookmarkR
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response BookmarkResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return BookmarkResponse{}, err
-        }
+        var data BookmarkResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return BookmarkResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return BookmarkResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Delete 
@@ -172,20 +163,16 @@ func (client *BookmarkTag) Delete(userId string, tweetId string) (BookmarkRespon
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response BookmarkResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return BookmarkResponse{}, err
-        }
+        var data BookmarkResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return BookmarkResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return BookmarkResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

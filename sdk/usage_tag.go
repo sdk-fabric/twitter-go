@@ -9,7 +9,8 @@ import (
     
     "encoding/json"
     "errors"
-    "github.com/apioo/sdkgen-go"
+    "fmt"
+    
     "io"
     "net/http"
     "net/url"
@@ -57,20 +58,16 @@ func (client *UsageTag) GetTweets() (TweetUsageResponse, error) {
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
-        var response TweetUsageResponse
-        err = json.Unmarshal(respBody, &response)
-        if err != nil {
-            return TweetUsageResponse{}, err
-        }
+        var data TweetUsageResponse
+        err := json.Unmarshal(respBody, &data)
 
-        return response, nil
+        return data, err
     }
 
-    switch resp.StatusCode {
-        default:
-            return TweetUsageResponse{}, errors.New("the server returned an unknown status code")
-    }
+    var statusCode = resp.StatusCode
+    return TweetUsageResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
+
 
 
 

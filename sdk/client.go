@@ -9,6 +9,7 @@ import (
     
     
     
+    
     "github.com/apioo/sdkgen-go"
     
     
@@ -72,3 +73,8 @@ func Build(token string) (*Client, error) {
     return NewClient("https://api.twitter.com", credentials)
 }
 
+func BuildAnonymous() (*Client, error) {
+    var credentials = sdkgen.Anonymous{}
+
+    return NewClient("https://api.twitter.com", credentials)
+}
