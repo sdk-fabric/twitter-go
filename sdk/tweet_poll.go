@@ -3,8 +3,8 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetPoll struct {
     DurationMinutes int `json:"duration_minutes"`
     Options []string `json:"options"`
 }
+

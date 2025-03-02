@@ -3,8 +3,8 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetReply struct {
     ExcludeReplyUserIds []string `json:"exclude_reply_user_ids"`
     InReplyToTweetId string `json:"in_reply_to_tweet_id"`
 }
+

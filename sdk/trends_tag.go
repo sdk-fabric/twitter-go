@@ -3,14 +3,13 @@
 // @see https://sdkgen.app
 
 
-package sdk
 
 import (
     
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -24,7 +23,7 @@ type TrendsTag struct {
 
 
 // GetByWoeid The Trends lookup endpoint allow developers to get the Trends for a location, specified using the where-on-earth id (WOEID).
-func (client *TrendsTag) GetByWoeid(woeid string) (TrendCollection, error) {
+func (client *TrendsTag) GetByWoeid(woeid string) (*TrendCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["woeid"] = woeid
 
@@ -34,7 +33,7 @@ func (client *TrendsTag) GetByWoeid(woeid string) (TrendCollection, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/trends/by/woeid/:woeid", pathParams))
     if err != nil {
-        return TrendCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -42,31 +41,41 @@ func (client *TrendsTag) GetByWoeid(woeid string) (TrendCollection, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TrendCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TrendCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TrendCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TrendCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TrendCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

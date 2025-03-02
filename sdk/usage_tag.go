@@ -3,14 +3,13 @@
 // @see https://sdkgen.app
 
 
-package sdk
 
 import (
     
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -24,7 +23,7 @@ type UsageTag struct {
 
 
 // GetTweets The Usage API in the Twitter API v2 allows developers to programmatically retrieve their project usage. Using thie endpoint, developers can keep a track and monitor of the number of Tweets they have pulled for a given billing cycle.
-func (client *UsageTag) GetTweets() (TweetUsageResponse, error) {
+func (client *UsageTag) GetTweets() (*TweetUsageResponse, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -33,7 +32,7 @@ func (client *UsageTag) GetTweets() (TweetUsageResponse, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/usage/tweets", pathParams))
     if err != nil {
-        return TweetUsageResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -41,31 +40,41 @@ func (client *UsageTag) GetTweets() (TweetUsageResponse, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetUsageResponse{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetUsageResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetUsageResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetUsageResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetUsageResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

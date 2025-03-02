@@ -3,7 +3,6 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type Fields struct {
     MediaFields string `json:"media.fields"`
     PlaceFields string `json:"place.fields"`
@@ -11,3 +10,4 @@ type Fields struct {
     TweetFields string `json:"tweet.fields"`
     UserFields string `json:"user.fields"`
 }
+

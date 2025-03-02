@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type HideReplyResponse struct {
     Data *HideReply `json:"data"`
 }
+

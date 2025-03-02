@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type LikeResponse struct {
     Data *Like `json:"data"`
 }
+

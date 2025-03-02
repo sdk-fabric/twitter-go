@@ -3,7 +3,6 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type User struct {
     CreatedAt string `json:"created_at"`
     Id string `json:"id"`
@@ -11,3 +10,4 @@ type User struct {
     PinnedTweetId string `json:"pinned_tweet_id"`
     Username string `json:"username"`
 }
+

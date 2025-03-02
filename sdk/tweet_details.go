@@ -3,7 +3,6 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetDetails struct {
     Id string `json:"id"`
     Text string `json:"text"`
@@ -13,3 +12,4 @@ type TweetDetails struct {
     ConversationId string `json:"conversation_id"`
     InReplyToUserId string `json:"in_reply_to_user_id"`
 }
+

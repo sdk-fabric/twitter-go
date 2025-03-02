@@ -3,10 +3,10 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetUsage struct {
     CapResetDay int `json:"cap_reset_day"`
     ProjectCap string `json:"project_cap"`
     ProjectId string `json:"project_id"`
     ProjectUsage string `json:"project_usage"`
 }
+

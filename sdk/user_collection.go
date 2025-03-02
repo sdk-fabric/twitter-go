@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type UserCollection struct {
     Data []User `json:"data"`
 }
+

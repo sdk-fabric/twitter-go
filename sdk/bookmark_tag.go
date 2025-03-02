@@ -3,14 +3,13 @@
 // @see https://sdkgen.app
 
 
-package sdk
 
 import (
     "bytes"
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -24,7 +23,7 @@ type BookmarkTag struct {
 
 
 // GetAll Allows you to get an authenticated user&#039;s 800 most recent bookmarked Tweets.
-func (client *BookmarkTag) GetAll(userId string, expansions string, paginationToken string, fields Fields) (TweetCollection, error) {
+func (client *BookmarkTag) GetAll(userId string, expansions string, paginationToken string, fields Fields) (*TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -38,7 +37,7 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, paginationTo
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -46,35 +45,45 @@ func (client *BookmarkTag) GetAll(userId string, expansions string, paginationTo
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Create 
-func (client *BookmarkTag) Create(userId string, payload SingleTweet) (BookmarkResponse, error) {
+func (client *BookmarkTag) Create(userId string, payload SingleTweet) (*BookmarkResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -84,50 +93,60 @@ func (client *BookmarkTag) Create(userId string, payload SingleTweet) (BookmarkR
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks", pathParams))
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("POST", u.String(), reqBody)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data BookmarkResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return BookmarkResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Delete 
-func (client *BookmarkTag) Delete(userId string, tweetId string) (BookmarkResponse, error) {
+func (client *BookmarkTag) Delete(userId string, tweetId string) (*BookmarkResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
     pathParams["tweet_id"] = tweetId
@@ -138,7 +157,7 @@ func (client *BookmarkTag) Delete(userId string, tweetId string) (BookmarkRespon
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/bookmarks/:tweet_id", pathParams))
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -146,31 +165,41 @@ func (client *BookmarkTag) Delete(userId string, tweetId string) (BookmarkRespon
 
     req, err := http.NewRequest("DELETE", u.String(), nil)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return BookmarkResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data BookmarkResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return BookmarkResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

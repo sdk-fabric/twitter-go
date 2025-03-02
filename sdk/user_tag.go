@@ -3,14 +3,13 @@
 // @see https://sdkgen.app
 
 
-package sdk
 
 import (
     "bytes"
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -24,7 +23,7 @@ type UserTag struct {
 
 
 // GetAll Returns a variety of information about one or more users specified by the requested IDs.
-func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (UserCollection, error) {
+func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (*UserCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -37,7 +36,7 @@ func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (Use
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users", pathParams))
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -45,35 +44,45 @@ func (client *UserTag) GetAll(ids string, expansions string, fields Fields) (Use
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data UserCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Get Returns a variety of information about a single user specified by the requested ID.
-func (client *UserTag) Get(userId string, expansions string, fields Fields) (User, error) {
+func (client *UserTag) Get(userId string, expansions string, fields Fields) (*User, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -86,7 +95,7 @@ func (client *UserTag) Get(userId string, expansions string, fields Fields) (Use
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id", pathParams))
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -94,35 +103,45 @@ func (client *UserTag) Get(userId string, expansions string, fields Fields) (Use
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data User
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return User{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetTimeline Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow. This endpoint can return every Tweet created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
-func (client *UserTag) GetTimeline(userId string, exclude string, expansions string, pagination Pagination, fields Fields) (TweetCollection, error) {
+func (client *UserTag) GetTimeline(userId string, exclude string, expansions string, pagination Pagination, fields Fields) (*TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -138,7 +157,7 @@ func (client *UserTag) GetTimeline(userId string, exclude string, expansions str
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/timelines/reverse_chronological", pathParams))
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -146,35 +165,45 @@ func (client *UserTag) GetTimeline(userId string, exclude string, expansions str
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetLikedTweets Tweets liked by a user
-func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (TweetCollection, error) {
+func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResults int, paginationToken string, fields Fields) (*TweetCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -189,7 +218,7 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/liked_tweets", pathParams))
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -197,35 +226,45 @@ func (client *UserTag) GetLikedTweets(userId string, expansions string, maxResul
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // RemoveLike Allows a user or authenticated user ID to unlike a Tweet.
-func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, error) {
+func (client *UserTag) RemoveLike(userId string, tweetId string) (*LikeResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
     pathParams["tweet_id"] = tweetId
@@ -236,7 +275,7 @@ func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, 
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes/:tweet_id", pathParams))
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -244,35 +283,45 @@ func (client *UserTag) RemoveLike(userId string, tweetId string) (LikeResponse, 
 
     req, err := http.NewRequest("DELETE", u.String(), nil)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data LikeResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return LikeResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // CreateLike Causes the user ID identified in the path parameter to Like the target Tweet.
-func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeResponse, error) {
+func (client *UserTag) CreateLike(userId string, payload SingleTweet) (*LikeResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["user_id"] = userId
 
@@ -282,50 +331,60 @@ func (client *UserTag) CreateLike(userId string, payload SingleTweet) (LikeRespo
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/:user_id/likes", pathParams))
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("POST", u.String(), reqBody)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return LikeResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data LikeResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return LikeResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // FindByName Returns a variety of information about one or more users specified by their usernames.
-func (client *UserTag) FindByName(usernames string, expansions string, fields Fields) (UserCollection, error) {
+func (client *UserTag) FindByName(usernames string, expansions string, fields Fields) (*UserCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -338,7 +397,7 @@ func (client *UserTag) FindByName(usernames string, expansions string, fields Fi
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/by", pathParams))
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -346,35 +405,45 @@ func (client *UserTag) FindByName(usernames string, expansions string, fields Fi
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data UserCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetMe Returns information about an authorized user.
-func (client *UserTag) GetMe(expansions string, fields string) (User, error) {
+func (client *UserTag) GetMe(expansions string, fields string) (*User, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -385,7 +454,7 @@ func (client *UserTag) GetMe(expansions string, fields string) (User, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/users/me", pathParams))
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -393,31 +462,41 @@ func (client *UserTag) GetMe(expansions string, fields string) (User, error) {
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return User{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data User
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return User{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

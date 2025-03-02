@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type BookmarkResponse struct {
     Data *Bookmark `json:"data"`
 }
+

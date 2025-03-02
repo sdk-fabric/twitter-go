@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type Bookmark struct {
     Bookmarked bool `json:"bookmarked"`
 }
+

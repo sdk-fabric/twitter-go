@@ -3,7 +3,6 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type Pagination struct {
     StartTime string `json:"start_time"`
     EndTime string `json:"end_time"`
@@ -12,3 +11,4 @@ type Pagination struct {
     MaxResults int `json:"max_results"`
     PaginationToken string `json:"pagination_token"`
 }
+

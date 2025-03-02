@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetUsageResponse struct {
     Data *TweetUsage `json:"data"`
 }
+

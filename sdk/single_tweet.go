@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type SingleTweet struct {
     TweetId string `json:"tweet_id"`
 }
+

@@ -3,8 +3,8 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetCreate struct {
     Id string `json:"id"`
     Text string `json:"text"`
 }
+

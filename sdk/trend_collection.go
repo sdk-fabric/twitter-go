@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TrendCollection struct {
     Data []Trend `json:"data"`
 }
+

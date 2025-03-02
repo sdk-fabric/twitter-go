@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type HideReply struct {
     Hidden bool `json:"hidden"`
 }
+

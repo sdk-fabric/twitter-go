@@ -3,14 +3,13 @@
 // @see https://sdkgen.app
 
 
-package sdk
 
 import (
     "bytes"
     "encoding/json"
     "errors"
     "fmt"
-    
+    "github.com/apioo/sdkgen-go/v2"
     "io"
     "net/http"
     "net/url"
@@ -24,7 +23,7 @@ type TweetTag struct {
 
 
 // GetAll Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
-func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (TweetCollection, error) {
+func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (*TweetCollection, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -37,7 +36,7 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -45,35 +44,45 @@ func (client *TweetTag) GetAll(ids string, expansions string, fields Fields) (Tw
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Get Returns a variety of information about a single Tweet specified by the requested ID.
-func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (TweetEntity, error) {
+func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (*TweetEntity, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -86,7 +95,7 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {
-        return TweetEntity{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -94,35 +103,45 @@ func (client *TweetTag) Get(tweetId string, expansions string, fields Fields) (T
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return TweetEntity{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetEntity{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetEntity{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetEntity
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetEntity{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Create Creates a Tweet on behalf of an authenticated user.
-func (client *TweetTag) Create(payload Tweet) (TweetCreateResponse, error) {
+func (client *TweetTag) Create(payload Tweet) (*TweetCreateResponse, error) {
     pathParams := make(map[string]interface{})
 
     queryParams := make(map[string]interface{})
@@ -131,50 +150,60 @@ func (client *TweetTag) Create(payload Tweet) (TweetCreateResponse, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets", pathParams))
     if err != nil {
-        return TweetCreateResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return TweetCreateResponse{}, err
+        return nil, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("POST", u.String(), reqBody)
     if err != nil {
-        return TweetCreateResponse{}, err
+        return nil, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetCreateResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetCreateResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetCreateResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetCreateResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // Delete Allows a user or authenticated user ID to delete a Tweet.
-func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
+func (client *TweetTag) Delete(tweetId string) (*TweetDeleteResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -184,7 +213,7 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id", pathParams))
     if err != nil {
-        return TweetDeleteResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -192,35 +221,45 @@ func (client *TweetTag) Delete(tweetId string) (TweetDeleteResponse, error) {
 
     req, err := http.NewRequest("DELETE", u.String(), nil)
     if err != nil {
-        return TweetDeleteResponse{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return TweetDeleteResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return TweetDeleteResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data TweetDeleteResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return TweetDeleteResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // HideReply Hides or unhides a reply to a Tweet.
-func (client *TweetTag) HideReply(tweetId string, payload HideReply) (HideReplyResponse, error) {
+func (client *TweetTag) HideReply(tweetId string, payload HideReply) (*HideReplyResponse, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -230,50 +269,60 @@ func (client *TweetTag) HideReply(tweetId string, payload HideReply) (HideReplyR
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/hidden", pathParams))
     if err != nil {
-        return HideReplyResponse{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
 
     raw, err := json.Marshal(payload)
     if err != nil {
-        return HideReplyResponse{}, err
+        return nil, err
     }
 
     var reqBody = bytes.NewReader(raw)
 
     req, err := http.NewRequest("PUT", u.String(), reqBody)
     if err != nil {
-        return HideReplyResponse{}, err
+        return nil, err
     }
 
     req.Header.Set("Content-Type", "application/json")
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return HideReplyResponse{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return HideReplyResponse{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data HideReplyResponse
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return HideReplyResponse{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 // GetLikingUsers Allows you to get information about a Tweet’s liking users.
-func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxResults int, paginationToken string) (UserCollection, error) {
+func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxResults int, paginationToken string) (*UserCollection, error) {
     pathParams := make(map[string]interface{})
     pathParams["tweet_id"] = tweetId
 
@@ -286,7 +335,7 @@ func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxRes
 
     u, err := url.Parse(client.internal.Parser.Url("/2/tweets/:tweet_id/liking_users", pathParams))
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     u.RawQuery = client.internal.Parser.QueryWithStruct(queryParams, queryStructNames).Encode()
@@ -294,31 +343,41 @@ func (client *TweetTag) GetLikingUsers(tweetId string, expansions string, maxRes
 
     req, err := http.NewRequest("GET", u.String(), nil)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
 
     resp, err := client.internal.HttpClient.Do(req)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     defer resp.Body.Close()
 
     respBody, err := io.ReadAll(resp.Body)
     if err != nil {
-        return UserCollection{}, err
+        return nil, err
     }
 
     if resp.StatusCode >= 200 && resp.StatusCode < 300 {
         var data UserCollection
         err := json.Unmarshal(respBody, &data)
 
-        return data, err
+        return &data, err
     }
 
     var statusCode = resp.StatusCode
-    return UserCollection{}, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
+    if statusCode >= 0 && statusCode <= 999 {
+        var data Errors
+        err := json.Unmarshal(respBody, &data)
+
+        return nil, &ErrorsException{
+            Payload: data,
+            Previous: err,
+        }
+    }
+
+    return nil, errors.New(fmt.Sprint("The server returned an unknown status code: ", statusCode))
 }
 
 

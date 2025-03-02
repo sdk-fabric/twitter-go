@@ -3,8 +3,8 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type Trend struct {
     TrendName string `json:"trend_name"`
     TweetCount int `json:"tweet_count"`
 }
+

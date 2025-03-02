@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type TweetEntity struct {
     Data *TweetDetails `json:"data"`
 }
+

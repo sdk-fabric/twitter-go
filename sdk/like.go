@@ -3,7 +3,7 @@
 // @see https://sdkgen.app
 
 
-package sdk
 type Like struct {
     Liked string `json:"liked"`
 }
+
