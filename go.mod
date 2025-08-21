@@ -1,4 +1,4 @@
-module github.com/sdk-fabric/twitter
+module github.com/sdk-fabric/twitter-go
 
 go 1.18
 
