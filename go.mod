@@ -1,4 +1,4 @@
-module github.com/sdk-fabric/notion-go
+module github.com/sdk-fabric/twitter
 
 go 1.18
 
