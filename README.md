@@ -17,65 +17,65 @@ import (
 var client, _ = sdk.Build("[access_token]");
 
 // Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
-response, err := client.Tweet().Getall("ids", "expansions", nil)
+response, err := client.Tweet().getAll("ids", "expansions", nil)
 
 // Returns a variety of information about a single Tweet specified by the requested ID.
-response, err := client.Tweet().Get("tweet_id", "expansions", nil)
+response, err := client.Tweet().get("tweet_id", "expansions", nil)
 
 // Creates a Tweet on behalf of an authenticated user.
-response, err := client.Tweet().Create(Tweet{})
+response, err := client.Tweet().create(Tweet{})
 
 // Allows a user or authenticated user ID to delete a Tweet.
-response, err := client.Tweet().Delete("tweet_id")
+response, err := client.Tweet().delete("tweet_id")
 
 // Hides or unhides a reply to a Tweet.
-response, err := client.Tweet().Hidereply("tweet_id", Hidereply{})
+response, err := client.Tweet().hideReply("tweet_id", HideReply{})
 
 // Allows you to get information about a Tweet’s liking users.
-response, err := client.Tweet().Getlikingusers("tweet_id", "expansions", 1, "pagination_token")
+response, err := client.Tweet().getLikingUsers("tweet_id", "expansions", 1, "pagination_token")
 
 // The Usage API in the Twitter API v2 allows developers to programmatically retrieve their project usage.
-response, err := client.Usage().Gettweets()
+response, err := client.Usage().getTweets()
 
 // Returns a variety of information about one or more users specified by the requested IDs.
-response, err := client.User().Getall("ids", "expansions", nil)
+response, err := client.User().getAll("ids", "expansions", nil)
 
 // Returns a variety of information about a single user specified by the requested ID.
-response, err := client.User().Get("user_id", "expansions", nil)
+response, err := client.User().get("user_id", "expansions", nil)
 
 // Allows you to retrieve a collection of the most recent Tweets and Retweets posted by you and users you follow.
-response, err := client.User().Gettimeline("user_id", "exclude", "expansions", nil, nil)
+response, err := client.User().getTimeline("user_id", "exclude", "expansions", nil, nil)
 
 // Tweets liked by a user.
-response, err := client.User().Getlikedtweets("user_id", "expansions", 1, "pagination_token", nil)
+response, err := client.User().getLikedTweets("user_id", "expansions", 1, "pagination_token", nil)
 
 // Allows a user or authenticated user ID to unlike a Tweet.
-response, err := client.User().Removelike("user_id", "tweet_id")
+response, err := client.User().removeLike("user_id", "tweet_id")
 
 // Causes the user ID identified in the path parameter to Like the target Tweet.
-response, err := client.User().Createlike("user_id", SingleTweet{})
+response, err := client.User().createLike("user_id", Single_Tweet{})
 
 // Returns a variety of information about one or more users specified by their usernames.
-response, err := client.User().Findbyname("usernames", "expansions", nil)
+response, err := client.User().findByName("usernames", "expansions", nil)
 
 // Returns information about an authorized user.
-response, err := client.User().Getme("expansions", "fields")
+response, err := client.User().getMe("expansions", "fields")
 
 // Allows you to get an authenticated user's 800 most recent bookmarked Tweets.
-response, err := client.Bookmark().Getall("user_id", "expansions", "pagination_token", nil)
+response, err := client.Bookmark().getAll("user_id", "expansions", "pagination_token", nil)
 
-response, err := client.Bookmark().Create("user_id", SingleTweet{})
+response, err := client.Bookmark().create("user_id", Single_Tweet{})
 
-response, err := client.Bookmark().Delete("user_id", "tweet_id")
+response, err := client.Bookmark().delete("user_id", "tweet_id")
 
-response, err := client.Search().Getrecent("query", "sort_order", "expansions", nil, nil)
+response, err := client.Search().getRecent("query", "sort_order", "expansions", nil, nil)
 
 // Returns Quote Tweets for a Tweet specified by the requested Tweet ID.
-response, err := client.Quote().Getall("tweet_id", "exclude", "expansions", 1, "pagination_token", nil)
+response, err := client.Quote().getAll("tweet_id", "exclude", "expansions", 1, "pagination_token", nil)
 
 // The Trends lookup endpoint allow developers to get the Trends for a location, specified using the where-on-earth id (WOEID).
-response, err := client.Trends().Getbywoeid("woeid")
+response, err := client.Trends().getByWoeid("woeid")
 
 // Returns the Retweets for a given Tweet ID.
-response, err := client.Retweet().Getall("tweet_id", "expansions", 1, nil)
+response, err := client.Retweet().getAll("tweet_id", "expansions", 1, nil)
 ```
